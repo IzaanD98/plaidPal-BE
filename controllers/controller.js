@@ -61,7 +61,7 @@ exports.getPlaidAccounts = (req, res, next) => {
       res.status(200).send(accounts);
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
     });
 };
 

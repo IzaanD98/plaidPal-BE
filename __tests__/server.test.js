@@ -127,7 +127,7 @@ describe.skip("POST /api/exchange_public_token", () => {
   });
 });
 
-describe("POST /api/plaid/accounts", () => {
+describe.only("POST /api/plaid/accounts", () => {
   // const public_token = "public-sandbox-59490658-86c3-46f7-861f-b6a0e54f405c";
   // const sendObj = {token: public_token};
   const sendObj = {

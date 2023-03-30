@@ -50,8 +50,7 @@ exports.postCreateLink = () => {
       headers: plaidHeaders,
     })
     .then((response) => {
-      return client
-        .linkTokenCreate(configsForLinkTokenCreate)
+      return client.linkTokenCreate(configsForLinkTokenCreate)
         .then((response) => {
           console.log("linktokencreate worked");
           console.log(response.data);
@@ -90,10 +89,12 @@ exports.fetchPlaidAccounts = (obj) => {
   return User.find({ googleId: googleId })
     .then((results) => {
       access_token = results[0].access_token;
+      console.log(access_token);
       return access_token;
     })
     .then((access_token) => {
       return client.accountsGet({ access_token }).then((response) => {
+        console.log(response.data.accounts);
         return new Promise((resolve, reject) => {
           const account_ids = response.data.accounts.map(
             (account) => account.account_id
