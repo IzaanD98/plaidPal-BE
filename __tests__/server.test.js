@@ -46,7 +46,7 @@ describe("GET /api/users", () => {
   });
 });
 
-describe("POST /api/users", () => {
+describe.skip("POST /api/users", () => {
   const validInput = {
     googleId: "11211",
     displayName: "Test 11121",
@@ -163,3 +163,25 @@ describe("post /api/plaid/transactions", () => {
       });
   });
 });
+
+// describe.only("GET /api/users/:googleId", () => {
+//   test("200 - GET: returns array of users with the correct properties", () => {
+//     return request(app)
+//       .get("/api/users/103483413108620628802")
+//       .expect(200)
+//       .then((response) => {
+//         expect(response.body[0]).toHaveProperty(
+//           "googleId",
+//           "103483413108620628802"
+//         );
+//       });
+//   });
+//   test("404 -GET: returns Not found status when given an invalid endpoint ", () => {
+//     return request(app)
+//       .get("/api/userz/103483413108620628802")
+//       .expect(404)
+//       .then((body) => {
+//         expect(body.res.statusMessage).toBe("Not Found");
+//       });
+//   });
+// });

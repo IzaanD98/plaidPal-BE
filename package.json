@@ -23,6 +23,7 @@
     "nodemon": "^2.0.22",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
+    "path": "^0.12.7",
     "plaid": "^13.0.0",
     "supertest": "^6.3.3",
     "uuid": "^9.0.0"
