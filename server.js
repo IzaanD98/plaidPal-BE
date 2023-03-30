@@ -6,7 +6,7 @@ const {
   tokenExchange,
   getPlaidAccounts,
   getTransactions,
-} = require("../be-main/controllers/controller");
+} = require("./controllers/controller");
 const db = require("./db/db");
 const passport = require("passport");
 const session = require("express-session");
