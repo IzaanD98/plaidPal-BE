@@ -46,7 +46,7 @@ describe("GET /api/users", () => {
   });
 });
 
-describe.only("POST /api/users", () => {
+describe("POST /api/users", () => {
   const validInput = {
     googleId: "11211",
     displayName: "Test 11121",
