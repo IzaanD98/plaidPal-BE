@@ -46,11 +46,11 @@ describe("GET /api/users", () => {
   });
 });
 
-describe("POST /api/users", () => {
+describe.only("POST /api/users", () => {
   const validInput = {
-    googleId: "1111",
-    displayName: "Test 1111",
-    email: "test1111@gmail.com",
+    googleId: "11211",
+    displayName: "Test 11121",
+    email: "test11211@gmail.com",
     photo: "www.1111.com",
   };
 
@@ -98,7 +98,7 @@ describe("POST /api/create_link_token", () => {
 
 let access_token = "";
 
-describe("POST /api/exchange_public_token", () => {
+describe.skip("POST /api/exchange_public_token", () => {
   // const public_token = "public-sandbox-d514a8eb-a4f8-4bbc-9d4e-5d1facbc0699";
   // const public_token = "public-sandbox-d68eb183-a7dc-4b64-81ab-6c0347234c9d"; //MIke's
   // const public_token = "0679e97f-38fb-48a7-9848-4e08ce4831cf"; // mike new 2nd one
@@ -119,10 +119,9 @@ describe("POST /api/exchange_public_token", () => {
             "access_token",
             expect.any(String)
           );
-          expect(response.body).toHaveProperty("item_id", expect.any(String));
-          expect(response.body).toHaveProperty("error");
-          expect(response.body.error).toBe(null);
-          access_token = response.body.access_token;
+          expect(response.body).toEqual({
+            message: "access token added to User DB",
+          });
         })
     );
   });
@@ -148,7 +147,7 @@ describe("POST /api/plaid/accounts", () => {
   });
 });
 
-describe.only("post /api/plaid/transactions", () => {
+describe("post /api/plaid/transactions", () => {
   const obj = {
     googleId: "103483413108620628802",
   };

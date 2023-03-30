@@ -17,7 +17,7 @@ exports.getAllUsers = (req, res, next) => {
 };
 exports.createUser = (req, res, next) => {
   const newUser = req.body;
-  postUser(newUser, userId)
+  postUser(newUser)
     .then((results) => {
       res.status(201).send({ message: results });
     })

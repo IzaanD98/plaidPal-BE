@@ -21,7 +21,7 @@ module.exports = function (passport) {
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "https://plaidpal-api.onrender.com",
+        callbackURL: "https://plaidpal-api.onrender.com/auth/google/callback",
       },
       async (accessToken, refreshToken, profile, done) => {
         try {

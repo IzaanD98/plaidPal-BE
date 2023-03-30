@@ -66,18 +66,13 @@ exports.postTokenExchange = (obj) => {
       .itemPublicTokenExchange({ public_token: obj.token })
       .then((result) => {
         const access_token = result.data.access_token;
-        let returnObj = {
-          access_token: result.data.access_token,
-          item_id: result.data.item_id,
-          error: null,
-        };
         User.updateOne(
           { googleId: obj.googleId.toString() },
           { access_token: access_token }
         )
           .then(() => {
             console.log(returnObj);
-            resolve(returnObj);
+            resolve({ message: "access token added to User DB" });
           })
           .catch((error) => {
             console.log(error);
@@ -127,7 +122,6 @@ exports.fetchTransactions = (obj) => {
           end_date: "2022-02-01",
         })
         .then((response) => {
-          console.log(response.data.transactions);
           return response.data.transactions;
         });
     });
