@@ -1,5 +1,5 @@
 const app = require("./server");
 
-app.listen(9090, () => {
-  console.log("listening on port 9090");
+app.listen(3000, () => {
+  console.log("listening on port 3000");
 });
