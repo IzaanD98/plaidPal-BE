@@ -11,3 +11,15 @@ exports.postUser = (newUser) => {
     return results;
   });
 };
+
+exports.fetchUserById = (googleId) => {
+  return User.find({ googleId }).then((results) => {
+    return results;
+  });
+};
+
+exports.removeUserById = (googleId) => {
+  return User.deleteOne({ googleId }).then((results) => {
+    return results;
+  });
+};

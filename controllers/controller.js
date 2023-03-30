@@ -1,4 +1,9 @@
-const { postUser, fetchAllUsers } = require("../models/mongo_models");
+const {
+  postUser,
+  fetchAllUsers,
+  fetchUserById,
+  removeUserById,
+} = require("../models/mongo_models");
 const {
   postCreateLink,
   postTokenExchange,
@@ -65,6 +70,28 @@ exports.getTransactions = (req, res, next) => {
   fetchTransactions(obj)
     .then((transactions) => {
       res.status(200).send(transactions);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+exports.getUserById = (req, res, next) => {
+  const { googleId } = req.params;
+  fetchUserById(googleId)
+    .then((results) => {
+      res.status(200).send(results);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+exports.deleteUserById = (req, res, next) => {
+  const { googleId } = req.params;
+  removeUserById(googleId)
+    .then(() => {
+      res.status(204).send({ message: "User is Deleted" });
     })
     .catch((err) => {
       console.log(err);

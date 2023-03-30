@@ -18,7 +18,12 @@ require("./config/passport")(passport);
 
 db();
 
-const { createUser, getAllUsers } = require("./controllers/controller");
+const {
+  createUser,
+  getAllUsers,
+  getUserById,
+  deleteUserById,
+} = require("./controllers/controller");
 
 const app = express();
 
@@ -52,6 +57,10 @@ app.get(
 );
 
 app.get("/api/users", getAllUsers);
+
+app.get("/api/users/:googleId", getUserById);
+
+app.delete("/api/users/:googleId", deleteUserById);
 
 app.post("/api/users", createUser);
 
