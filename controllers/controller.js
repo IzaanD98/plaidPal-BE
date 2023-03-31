@@ -33,9 +33,9 @@ exports.createUser = (req, res, next) => {
 };
 
 exports.createLinkToken = (req, res, next) => {
-  postCreateLink()
-    .then((link_token) => {
-      res.status(200).send(link_token);
+      postCreateLink()
+      .then((link_token) => {
+        res.status(200).set({}).send(link_token);
     })
     .catch((err) => {
       console.log(err);
