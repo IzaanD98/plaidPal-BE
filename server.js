@@ -213,7 +213,7 @@ app.post("/api/login", async (req, res) => {
           lastName: profile?.family_name,
           picture: profile?.picture,
           email: profile?.email,
-          token: jwt.sign({ email: profile?.email }, process.env.JWT_SECRET, {
+          token: jwt.sign({ email: profile?.email }, process.env.GOOGLE_CLIENT_SECRET, {
             expiresIn: "1d",
           }),
         },
