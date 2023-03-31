@@ -198,13 +198,14 @@ app.post("/api/login", async (req, res) => {
       // });
 
       let existsInDB = await User.find({ email: profile?.email });
+
       console.log(existsInDB);
       if (!existsInDB) {
         return res.status(400).json({
           message: "You are not registered. Please sign up",
         });
       }
-      console.log(process.env.GOOGLE_CLIENT_SECRET);
+
       res.status(201).json({
         message: "Login was successful", // the user object will be the one returned from the DB and not hard coded
         user: {
@@ -212,6 +213,7 @@ app.post("/api/login", async (req, res) => {
           lastName: profile?.family_name,
           picture: profile?.picture,
           email: profile?.email,
+          accounts: existsInDB[0].account_ids.length > 0 ? true : false,
           token: jwt.sign(
             { email: profile?.email },
             process.env.GOOGLE_CLIENT_SECRET,
