@@ -192,6 +192,8 @@ app.post("/api/login", async (req, res) => {
       }
 
       const profile = verificationResponse?.payload;
+      profile.googleId = verificationResponse?.payload.sub;
+
 
       // const existsInDB = DB.find((person) => person?.email === profile?.email); // perhaps findUserByID/Email/something? in the  user model :)
       // let existsInDB = "";
@@ -213,6 +215,7 @@ app.post("/api/login", async (req, res) => {
           lastName: profile?.family_name,
           picture: profile?.picture,
           email: profile?.email,
+          googleId: profile?.sub,
           token: jwt.sign({ email: profile?.email }, process.env.GOOGLE_CLIENT_SECRET, {
             expiresIn: "1d",
           }),
