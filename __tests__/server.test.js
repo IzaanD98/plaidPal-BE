@@ -165,7 +165,7 @@ describe("post /api/plaid/transactions", () => {
   });
 });
 
-describe.only("GET /api/users/:googleId", () => {
+describe("GET /api/users/:googleId", () => {
   test("200 - GET: returns array of users with the correct properties", () => {
     return request(app)
       .get("/api/users/103483413108620628802")
@@ -195,8 +195,8 @@ describe.only("GET /api/users/:googleId", () => {
 });
 
 //NOTE - need to change this test each time to delete a user in the curent mongoDB, or else '.skip' this test
-describe("Delete /api/users/:googleId", () => {
-  test.skip("204 - Delete: returns array of users with the correct properties", () => {
+describe.skip("Delete /api/users/:googleId", () => {
+  test("204 - Delete: returns array of users with the correct properties", () => {
     return request(app)
       // .delete("/api/users/112481449490803492799")
       .delete("/api/users/1111")
@@ -209,7 +209,7 @@ describe("Delete /api/users/:googleId", () => {
   });
 });
 
-describe('', ()=>{
+describe.skip('', ()=>{
   const obj = {
     body: {credential: null}
   }
@@ -225,7 +225,7 @@ describe('', ()=>{
   })
 })
 
-describe('', ()=>{
+describe.skip('', ()=>{
   const obj = {
     body: {credential: null}
   }
@@ -243,18 +243,36 @@ describe('', ()=>{
 
 
 
-describe.only('POST /api/notes/:transaction_id', () => {
+describe('POST /api/notes/:transaction_id', () => {
   test('A note is added to the DB for the given user and stored alongside the transaction_id supplied', () => {
     const obj = {
       googleId: "103483413108620628802",
-      note: "looks like this was error - need to get refund"
+      note: "Note to self - it looks like this was error - need to get refund"
     };
     return request(app)
     .post('/api/notes/bE8D7y4yaGiMNkVxzWkBhEdmApoWyKSmP1Qk7')
     .send(obj)
     .expect(201)
     .then((res) => {
-      console.log(res);
+      console.log(res.body);
+      expect(res.body).toEqual({ message: "Note added to DB" });
     })
-  });  
+  });
+  
+  test('A 2nd note can be added alongside the same transaction_id supplied', () => {
+    const obj = {
+      googleId: "103483413108620628802",
+      note: "2nd Note - this is getting urgent"
+    };
+    return request(app)
+    .post('/api/notes/bE8D7y4yaGiMNkVxzWkBhEdmApoWyKSmP1Qk7')
+    .send(obj)
+    .expect(201)
+    .then((res) => {
+      console.log(res.body);
+      expect(res.body).toEqual({ message: "Note added to DB" });
+    })
+  });
+  
+  
 });

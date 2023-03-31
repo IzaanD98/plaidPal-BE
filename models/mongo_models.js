@@ -25,8 +25,11 @@ exports.removeUserById = (googleId) => {
 };
 
 exports.addNote = (transaction_id, googleId, note) => {
-
-  return User.patchOne({googleId}, {notes:{transaction_id, note}})
+  console.log("in addnote");
+  console.log(transaction_id, googleId, note);
+  // return User.updateOne({googleId}, {$set:{notes:{transaction_id, note}}})
+  return User.updateOne({googleId}, {$set:{notes:{transaction_id, note}}})
+  // return User.patchOne({googleId}, {notes:{transaction_id, note}})
   // return User.updateOne({googleId}, {notes:{transaction_id, note}})
   .then((results)=>{
     console.log(results);

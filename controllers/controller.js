@@ -62,7 +62,7 @@ exports.getPlaidAccounts = (req, res, next) => {
       res.status(200).send(accounts);
     })
     .catch((err) => {
-      // console.log(err);
+      console.log(err);
     });
 };
 
@@ -105,9 +105,7 @@ exports.postNoteByTransactionId = (req, res, next) => {
   const {googleId, note} = obj;
 
   addNote(transaction_id, googleId, note)
-  .then((res)=> {
-    console.log('success');
-    console.log(res);
+  .then((result)=> {
     res.status(201).send({ message: "Note added to DB" });
   })
   .catch((err) => {
