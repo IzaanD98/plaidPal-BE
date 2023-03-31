@@ -126,14 +126,19 @@ app.post("/api/signup", async (req, res) => {
   console.log(req.body);
   console.log(req.body.credential);
   try {
-    if (req.body.credential !== null) {
+    // if (true) {
+      if (req.body.credential !== null) {
       const verificationResponse = await verifyGoogleToken(req.body.credential);
+      // const verificationResponse = await verifyGoogleToken("eyJhbGciOiJSUzI1NiIsImtpZCI6IjFhYWU4ZDdjOTIwNThiNWVlYTQ1Njg5NWJmODkwODQ1NzFlMzA2ZjMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJuYmYiOjE2ODAyNTg3MDUsImF1ZCI6IjgxODk0MTk1MzEzNC1naGFhc3BmbXEyODljcmVkNmJoMTJnbjU2MHRiMjc0ZC5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwNDMxMDcxODM3NDAxOTgxNTg2MyIsImVtYWlsIjoiaGFsZWVtaHVzc2FpbjY0QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhenAiOiI4MTg5NDE5NTMxMzQtZ2hhYXNwZm1xMjg5Y3JlZDZiaDEyZ241NjB0YjI3NGQuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJuYW1lIjoiSGFsZWVtIEh1c3NhaW4iLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EvQUdObXl4WXZUNFViMHUtYlZhYmd0S201Qno1bWlLbGQxSnp0ZjNRY3R0OD1zOTYtYyIsImdpdmVuX25hbWUiOiJIYWxlZW0iLCJmYW1pbHlfbmFtZSI6Ikh1c3NhaW4iLCJpYXQiOjE2ODAyNTkwMDUsImV4cCI6MTY4MDI2MjYwNSwianRpIjoiNGYwNDZkZDk2YWI4MDIxZGRlNzhjNGFkODNiMWMwNGM2YjJhODRkNiJ9.R7qREQ3xe94pKwDiJTYLKjff3-ryo7MMNBUKi98_mOkWesA5LoH0Hh7EjnIh5Q4Z0Z7yjC9wleW6b9Z6qJgGf_PsDskVktJE7bU0-SFpZY71z5B4KJOWB1yjAFHVYT8yGZM-pXt9e1roMHbixJ17eawcH4wAEYFcPwPZ6ng3DZD9TCEK-pNsQKgMk0T1jvs4KSEb8G7XRtLudIPydccBQz6dwvHrVKw7BumzqyOAu8gNKtM1vd5lL6bQkBTGGikQasMknyKuTmA66O_LKWU6i1Lsoj6145yDklmSaThjeEM4LJ4tTc6Ip6y9TFvXbn_p8DHe5_RyNFCm1KIqh2rKWQ");
+
       console.log(verificationResponse);
       if (verificationResponse.error) {
         console.log('we got error on verifygoogletoken' + verificationResponse.error);
         return res.status(400).json({ message: verificationResponse.error });
       }
       const profile = verificationResponse?.payload;
+      profile.googleId = verificationResponse?.payload.sub;
+      profile.displayName = verificationResponse?.payload.name;
       User.create(profile)
         .then(() => {
           console.log('success adding profile to db');
