@@ -91,6 +91,7 @@ describe("POST /api/create_link_token", () => {
       .send("")
       .expect(200)
       .then((response) => {
+        console.log(response.body);
         expect(response.body).toHaveProperty("expiration", expect.any(String));
         expect(response.body).toHaveProperty("link_token", expect.any(String));
         expect(response.body).toHaveProperty("request_id", expect.any(String));
