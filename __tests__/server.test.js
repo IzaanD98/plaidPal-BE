@@ -165,7 +165,7 @@ describe("post /api/plaid/transactions", () => {
   });
 });
 
-describe("GET /api/users/:googleId", () => {
+describe.only("GET /api/users/:googleId", () => {
   test("200 - GET: returns array of users with the correct properties", () => {
     return request(app)
       .get("/api/users/103483413108620628802")
@@ -225,7 +225,7 @@ describe('', ()=>{
   })
 })
 
-describe.only('', ()=>{
+describe('', ()=>{
   const obj = {
     body: {credential: null}
   }
@@ -240,3 +240,21 @@ describe.only('', ()=>{
     })
   })
 })
+
+
+
+describe.only('POST /api/notes/:transaction_id', () => {
+  test('A note is added to the DB for the given user and stored alongside the transaction_id supplied', () => {
+    const obj = {
+      googleId: "103483413108620628802",
+      note: "looks like this was error - need to get refund"
+    };
+    return request(app)
+    .post('/api/notes/bE8D7y4yaGiMNkVxzWkBhEdmApoWyKSmP1Qk7')
+    .send(obj)
+    .expect(201)
+    .then((res) => {
+      console.log(res);
+    })
+  });  
+});

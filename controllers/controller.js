@@ -3,6 +3,7 @@ const {
   fetchAllUsers,
   fetchUserById,
   removeUserById,
+  addNote,
 } = require("../models/mongo_models");
 const {
   postCreateLink,
@@ -96,4 +97,20 @@ exports.deleteUserById = (req, res, next) => {
     .catch((err) => {
       console.log(err);
     });
+};
+
+exports.postNoteByTransactionId = (req, res, next) => {
+  const { transaction_id } = req.params;
+  const obj = req.body;
+  const {googleId, note} = obj;
+
+  addNote(transaction_id, googleId, note)
+  .then((res)=> {
+    console.log('success');
+    console.log(res);
+    res.status(201).send({ message: "Note added to DB" });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 };

@@ -23,3 +23,13 @@ exports.removeUserById = (googleId) => {
     return results;
   });
 };
+
+exports.addNote = (transaction_id, googleId, note) => {
+
+  return User.patchOne({googleId}, {notes:{transaction_id, note}})
+  // return User.updateOne({googleId}, {notes:{transaction_id, note}})
+  .then((results)=>{
+    console.log(results);
+    return results;
+  })
+}

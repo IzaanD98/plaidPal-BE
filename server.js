@@ -29,6 +29,7 @@ const {
   getAllUsers,
   getUserById,
   deleteUserById,
+  postNoteByTransactionId,
 } = require("./controllers/controller");
 
 const app = express();
@@ -100,6 +101,8 @@ app.post("/api/plaid/accounts", getPlaidAccounts);
 
 app.post("/api/plaid/transactions", getTransactions);
 
+app.post("/api/notes/:transaction_id", postNoteByTransactionId);
+
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
@@ -149,15 +152,20 @@ app.post("/api/signup", async (req, res) => {
           });
         })
         .catch((error) => {
+    console.log(error);
+    console.log('plaidPal error 1st catch:');
+
           res
             .status(500)
-            .json({ message: "An error occurred. Registration failed." });
+            .json({ message: "An error occurred. Registration failed. 1" });
         });
     }
   } catch (error) {
+    console.log('plaidPal error 2nd catch:');
+    console.log(error);
     res
       .status(500)
-      .json({ message: "An error occurred. Registration failed." });
+      .json({ message: "An error occurred. Registration failed. 2" });
   }
 });
 
