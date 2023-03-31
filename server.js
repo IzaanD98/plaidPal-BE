@@ -121,16 +121,20 @@ async function verifyGoogleToken(token) {
 
 app.post("/api/signup", async (req, res) => {
   console.log(req.body);
+  console.log(req.body.credential);
   try {
     if (req.body.credential !== null) {
       const verificationResponse = await verifyGoogleToken(req.body.credential);
       console.log(verificationResponse);
       if (verificationResponse.error) {
+        console.log('we got error on verifygoogletoken' + verificationResponse.error);
         return res.status(400).json({ message: verificationResponse.error });
       }
       const profile = verificationResponse?.payload;
       User.create(profile)
         .then(() => {
+          console.log('success adding profile to db');
+          console.log(profile);
           res.status(201).json({
             message: "Signup was successful",
             user: {
@@ -163,8 +167,13 @@ app.post("/api/signup", async (req, res) => {
 * prepend /api to the route eg. /api/login
 */
 app.post("/api/login", async (req, res) => {
+  console.log(req.body);
+  console.log(req.body.credential);
+
   try {
     if (req.body.credential !== null) {
+      console.log(req.body);
+      console.log(req.body.credential);
       const verificationResponse = await verifyGoogleToken(req.body.credential);
       console.log("verificationResponse");
       console.log(verificationResponse);
@@ -183,6 +192,7 @@ app.post("/api/login", async (req, res) => {
       // });
 
       let existsInDB = await User.find({email: profile?.email})
+      console.log(existsInDB);
       if (!existsInDB) {
         return res.status(400).json({
           message: "You are not registered. Please sign up",
