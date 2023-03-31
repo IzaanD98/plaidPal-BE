@@ -12,6 +12,12 @@ const passport = require("passport");
 const session = require("express-session");
 const dotenv = require("dotenv");
 
+const { OAuth2Client } = require("google-auth-library");  // npm install this on pp-be
+const jwt = require("jsonwebtoken"); // this needs installing too
+
+
+
+
 dotenv.config({ path: "./config.env" });
 
 require("./config/passport")(passport);
@@ -27,7 +33,16 @@ const {
 
 const app = express();
 
-app.use(cors());
+// app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    methods: "GET,POST,PUT,DELETE,OPTIONS",
+  })
+);   // Hmmmmmm :D   Deployed, this will be different. 
+
+
+
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -51,23 +66,23 @@ app.use(
   })
 );
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
-app.get(
-  "/auth/google",
-  passport.authenticate("google", {
-    scope: ["profile", "email"],
-  })
-);
+// app.get(
+//   "/auth/google",
+//   passport.authenticate("google", {
+//     scope: ["profile", "email"],
+//   })
+// );
 
-app.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/" }),
-  (req, res) => {
-    res.redirect("http://localhost:3000/dashboard");
-  }
-);
+// app.get(
+//   "/auth/google/callback",
+//   passport.authenticate("google", { failureRedirect: "/" }),
+//   (req, res) => {
+//     res.redirect("http://localhost:3000/dashboard");
+//   }
+// );
 
 app.get("/api/users", getAllUsers);
 
@@ -84,5 +99,116 @@ app.post("/api/exchange_public_token", tokenExchange);
 app.post("/api/plaid/accounts", getPlaidAccounts);
 
 app.post("/api/plaid/transactions", getTransactions);
+
+
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const client = new OAuth2Client(GOOGLE_CLIENT_ID);
+
+async function verifyGoogleToken(token) {
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: GOOGLE_CLIENT_ID,
+    });
+    return { payload: ticket.getPayload() };
+  } catch (error) {
+    return { error: "Invalid user detected. Please try again" };
+  }
+}
+/** to here */
+
+
+
+app.post("/api/signup", async (req, res) => {
+  console.log(req.body);
+  try {
+    if (req.body.credential !== null) {
+      const verificationResponse = await verifyGoogleToken(req.body.credential);
+      console.log(verificationResponse);
+      if (verificationResponse.error) {
+        return res.status(400).json({ message: verificationResponse.error });
+      }
+      const profile = verificationResponse?.payload;
+      User.create(profile)
+        .then(() => {
+          res.status(201).json({
+            message: "Signup was successful",
+            user: {
+              firstName: profile?.given_name,
+              lastName: profile?.family_name,
+              picture: profile?.picture,
+              email: profile?.email,
+              token: jwt.sign({ email: profile?.email }, "myScret", {
+                expiresIn: "1d",
+              }),
+            },
+          });
+        })
+        .catch((error) => {
+          res
+            .status(500)
+            .json({ message: "An error occurred. Registration failed." });
+        });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "An error occurred. Registration failed." });
+  }
+});
+
+
+
+/** Another route to add, and another function to add to the controller googleAuth..... 
+* prepend /api to the route eg. /api/login
+*/
+app.post("/api/login", async (req, res) => {
+  try {
+    if (req.body.credential !== null) {
+      const verificationResponse = await verifyGoogleToken(req.body.credential);
+      console.log("verificationResponse");
+      console.log(verificationResponse);
+      if (verificationResponse.error) {
+        return res.status(400).json({
+          message: verificationResponse.error,
+        });
+      }
+
+      const profile = verificationResponse?.payload;
+
+      // const existsInDB = DB.find((person) => person?.email === profile?.email); // perhaps findUserByID/Email/something? in the  user model :)
+      // let existsInDB = "";
+      // User.find({email:profile?.email}).then((result)=>{
+      //   existsInDB = result;
+      // });
+
+      let existsInDB = await User.find({email: profile?.email})
+      if (!existsInDB) {
+        return res.status(400).json({
+          message: "You are not registered. Please sign up",
+        });
+      }
+      res.status(201).json({
+        message: "Login was successful",   // the user object will be the one returned from the DB and not hard coded
+        user: {
+          firstName: profile?.given_name,
+          lastName: profile?.family_name,
+          picture: profile?.picture,
+          email: profile?.email,
+          token: jwt.sign({ email: profile?.email }, process.env.JWT_SECRET, {
+            expiresIn: "1d",
+          }),
+        },
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: error?.message || error,
+    });
+  }
+});
+
+
+
 
 module.exports = app;

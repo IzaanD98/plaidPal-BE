@@ -27,6 +27,18 @@ const userSchema = new mongoose.Schema({
   account_ids: {
     type: Array,
   },
+  firstName:{
+    type: String,
+  },
+  lastName:{
+    type: String,
+  },
+  picture:{
+    type: String,
+  },
+  token:{
+    type: String,
+  }
 });
 
 module.exports = mongoose.model("User", userSchema);

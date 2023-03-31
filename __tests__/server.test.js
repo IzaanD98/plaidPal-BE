@@ -208,3 +208,35 @@ describe("Delete /api/users/:googleId", () => {
       });
   });
 });
+
+describe('', ()=>{
+  const obj = {
+    body: {credential: null}
+  }
+  test('', ()=>{
+    return request(app)
+    .post('/api/signup')
+    .send(obj)
+    .expect(201)
+    .then((res)=>{
+      console.log("result is");
+      console.log(res);
+    })
+  })
+})
+
+describe.only('', ()=>{
+  const obj = {
+    body: {credential: null}
+  }
+  test('', ()=>{
+    return request(app)
+    .post('/api/login')
+    .send(obj)
+    .expect(201)
+    .then((res)=>{
+      console.log("result is");
+      console.log(res);
+    })
+  })
+})
