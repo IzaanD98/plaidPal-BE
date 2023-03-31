@@ -3,12 +3,12 @@ const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
   googleId: {
     type: String,
-    required: true,
+    // required: true,
     unique: true,
   },
   displayName: {
     type: String,
-    required: true,
+    // required: true,
   },
   email: {
     type: String,

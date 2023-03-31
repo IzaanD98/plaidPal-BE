@@ -141,11 +141,13 @@ app.post("/api/signup", async (req, res) => {
           res.status(201).json({
             message: "Signup was successful",
             user: {
+              googleId: profile?.sub,
+              displayName: profile?.name,
               firstName: profile?.given_name,
               lastName: profile?.family_name,
               picture: profile?.picture,
               email: profile?.email,
-              token: jwt.sign({ email: profile?.email }, "myScret", {
+              token: jwt.sign({ email: profile?.email }, "mySecret", {
                 expiresIn: "1d",
               }),
             },
