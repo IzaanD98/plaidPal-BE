@@ -136,6 +136,11 @@ app.post("/api/signup", async (req, res) => {
         console.log('we got error on verifygoogletoken' + verificationResponse.error);
         return res.status(400).json({ message: verificationResponse.error });
       }
+      User.find({googleId:verificationResponse?.payload.sub}).then((results)=>{
+        if(results !== undefined){
+          return res.status(409).json({message: "PlaidPal Error: User already exists"});
+        }
+      })
       const profile = verificationResponse?.payload;
       profile.googleId = verificationResponse?.payload.sub;
       profile.displayName = verificationResponse?.payload.name;
