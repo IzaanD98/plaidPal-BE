@@ -52,8 +52,6 @@ exports.postCreateLink = () => {
     .then((response) => {
       return client.linkTokenCreate(configsForLinkTokenCreate)
         .then((response) => {
-          console.log("linktokencreate worked");
-          console.log(response.data);
           return response.data;
         });
     });
@@ -89,12 +87,10 @@ exports.fetchPlaidAccounts = (obj) => {
   return User.find({ googleId: googleId })
     .then((results) => {
       access_token = results[0].access_token;
-      console.log(access_token);
       return access_token;
     })
     .then((access_token) => {
       return client.accountsGet({ access_token }).then((response) => {
-        console.log(response.data.accounts);
         return new Promise((resolve, reject) => {
           const account_ids = response.data.accounts.map(
             (account) => account.account_id
@@ -119,8 +115,8 @@ exports.fetchTransactions = (obj) => {
       return client
         .transactionsGet({
           // access_token,
-          access_token: access_token,
-          start_date: "2020-01-01",
+          access_token: access_token, //NOTE CHANGED
+          start_date: "2018-01-01",
           end_date: "2022-02-01",
         })
         .then((response) => {

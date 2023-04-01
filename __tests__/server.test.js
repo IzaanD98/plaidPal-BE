@@ -91,7 +91,6 @@ describe("POST /api/create_link_token", () => {
       .send("")
       .expect(200)
       .then((response) => {
-        console.log(response.body);
         expect(response.body).toHaveProperty("expiration", expect.any(String));
         expect(response.body).toHaveProperty("link_token", expect.any(String));
         expect(response.body).toHaveProperty("request_id", expect.any(String));
@@ -159,7 +158,6 @@ describe("post /api/plaid/transactions", () => {
       .send(obj)
       .expect(200)
       .then((response) => {
-        // console.log(response.body);
         expect(Array.isArray(response.body)).toEqual(true);
         expect(response.body.length).toBeGreaterThan(0);
       });
@@ -248,32 +246,75 @@ describe('POST /api/notes/:transaction_id', () => {
   test('A note is added to the DB for the given user and stored alongside the transaction_id supplied', () => {
     const obj = {
       googleId: "103483413108620628802",
-      note: "Note to self - it looks like this was error - need to get refund"
+      note: "Note One (again as expected): reminder AGAIN! - I need to make an expense claim for this."
     };
     return request(app)
     .post('/api/notes/bE8D7y4yaGiMNkVxzWkBhEdmApoWyKSmP1Qk7')
     .send(obj)
     .expect(201)
     .then((res) => {
-      console.log(res.body);
       expect(res.body).toEqual({ message: "Note added to DB" });
     })
   });
   
-  test('A 2nd note can be added alongside the same transaction_id supplied', () => {
+  test('A 2nd note for the same transaction_id will also be added', () => {
     const obj = {
       googleId: "103483413108620628802",
-      note: "2nd Note - this is getting urgent"
+      note: "Note Two: DONT FORGET - I still need to make an expense claim for this!!!"
     };
     return request(app)
     .post('/api/notes/bE8D7y4yaGiMNkVxzWkBhEdmApoWyKSmP1Qk7')
     .send(obj)
     .expect(201)
     .then((res) => {
-      console.log(res.body);
       expect(res.body).toEqual({ message: "Note added to DB" });
     })
   });
-  
-  
-});
+
+
+  test('A note to a different transaction_id will also be added', () => {
+    const obj = {
+      googleId: "103483413108620628802",
+      note: "Note Three: I should send a thank you message to Fred for paying this so quickly."
+    };
+    return request(app)
+    .post('/api/notes/myrMEApAeGI5JxvQ7VxkSpzwnel84Ntgknzml')
+    .send(obj)
+    .expect(201)
+    .then((res) => {
+      expect(res.body).toEqual({ message: "Note added to DB" });
+    })
+  });
+
+  test('Add multiple notes to test above further..., but with user who has no notes to start with', () => {
+    const obj = {googleId: "105784672668267029665",note: "first one - should be added"};
+    return request(app).post('/api/notes/myrMEApAeGI5JxvQ7VxkSpzwnel84Ntgknzml').send(obj).expect(201).then((res) => {expect(res.body).toEqual({ message: "Note added to DB" })})});
+  test('.....', () => {
+    const obj = {googleId: "105784672668267029665",note: "second one - should be added"};
+    return request(app).post('/api/notes/bE8D7y4yaGiMNkVxzWkBhEdmApoWyKSmP1Qk7').send(obj).expect(201).then((res) => {expect(res.body).toEqual({ message: "Note added to DB" })})});
+
+  test('.....', () => {
+    const obj = {googleId: "105784672668267029665",note: "Third one: should be added"};
+    return request(app).post('/api/notes/jEwLo7M7e9i3wxvV6dxDh6qNgDjz19u698q4L').send(obj).expect(201).then((res) => {expect(res.body).toEqual({ message: "Note added to DB" })})});
+
+  test('.....', () => {
+    const obj = {googleId: "105784672668267029665",note: "Fourth one: should be added"};
+    return request(app).post('/api/notes/GZjn1dadGgSk41dowa1QU9RnjdGXxPh6wXyB9').send(obj).expect(201).then((res) => {expect(res.body).toEqual({ message: "Note added to DB" })})});
+
+  test('.....', () => {
+    const obj = {googleId: "105784672668267029665",note: "Fifth one: should be added"};
+    return request(app).post('/api/notes/EeaVZ3x3zpCZ1oazvJoNHX74dNlj6rf4zPJRy').send(obj).expect(201).then((res) => {expect(res.body).toEqual({ message: "Note added to DB" })})});
+
+  test('.....', () => {
+    const obj = {googleId: "105784672668267029665",note: "Sixth one: should be added"};
+    return request(app).post('/api/notes/ANqwjKrKlZhgkplqbEp7hM9xzmXgq7T9MlEjj').send(obj).expect(201).then((res) => {expect(res.body).toEqual({ message: "Note added to DB" })})});
+
+  test('.....', () => {
+    const obj = {googleId: "105784672668267029665",note: "Seventh one: should be added"};
+    return request(app).post('/api/notes/WNKXrkEko7heVDXr7JDAIRmJaZPX63u6x7K9b').send(obj).expect(201).then((res) => {expect(res.body).toEqual({ message: "Note added to DB" })})});
+
+  test('.....', () => {
+    const obj = {googleId: "105784672668267029665",note: "Eighth one: should be added and overwrites second one"};
+    return request(app).post('/api/notes/bE8D7y4yaGiMNkVxzWkBhEdmApoWyKSmP1Qk7').send(obj).expect(201).then((res) => {expect(res.body).toEqual({ message: "Note added to DB" })})});
+
+  });
