@@ -6,6 +6,8 @@ const {
   tokenExchange,
   getPlaidAccounts,
   getTransactions,
+  // getSingleTransaction,
+  getSingleTransactionAndNote,
 } = require("./controllers/controller");
 const db = require("./db/db");
 const passport = require("passport");
@@ -29,6 +31,7 @@ const {
   getAllUsers,
   getUserById,
   deleteUserById,
+  deleteAcount,
   postNoteByTransactionId,
 } = require("./controllers/controller");
 
@@ -102,6 +105,10 @@ app.post("/api/plaid/accounts", getPlaidAccounts);
 app.post("/api/plaid/transactions", getTransactions);
 
 app.post("/api/notes/:transaction_id", postNoteByTransactionId);
+
+app.post("/api/transactions/:transaction_id", getSingleTransactionAndNote);
+
+app.delete("/api/accounts/:account_id", deleteAcount);
 
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;

@@ -4,12 +4,14 @@ const {
   fetchUserById,
   removeUserById,
   addNote,
+  delAccountById,
 } = require("../models/mongo_models");
 const {
   postCreateLink,
   postTokenExchange,
   fetchPlaidAccounts,
   fetchTransactions,
+  fetchSingleTransactionAndNote,
 } = require("../models/plaid_model");
 
 exports.getAllUsers = (req, res, next) => {
@@ -78,6 +80,19 @@ exports.getTransactions = (req, res, next) => {
     });
 };
 
+exports.getSingleTransactionAndNote = (req, res, next) => {
+  console.log('asdasdasdsd');
+  const {transaction_id} = req.params;
+  const idObj = req.body;
+  fetchSingleTransactionAndNote(idObj, transaction_id)
+  .then((transactionAndNoteObj)=> {
+    res.status(200).send(transactionAndNoteObj);
+  })
+  .catch((err) =>{
+    console.log(err);
+  })
+}
+
 exports.getUserById = (req, res, next) => {
   const { googleId } = req.params;
   fetchUserById(googleId)
@@ -113,3 +128,16 @@ exports.postNoteByTransactionId = (req, res, next) => {
     console.log(err);
   });
 };
+
+exports.deleteAcount = (req, res, next) => {
+  const { account_id } = req.params;
+  const googleId = req.body.googleId;
+  delAccountById(account_id, googleId)
+  .then((result)=>{
+    res.sendStatus(204);
+  })
+  .catch((err)=> {
+    console.log(err);
+  })
+
+}

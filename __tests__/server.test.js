@@ -98,7 +98,7 @@ describe("POST /api/create_link_token", () => {
   });
 });
 
-describe.only("POST /api/exchange_public_token", () => {
+describe.skip("POST /api/exchange_public_token", () => {
   // NOTE - TO TEST YOU NEED TO GET A NEW PUBLIC TOKEN EACH TIME - THE TOKEN EXPIRES IN 30 MINUTES
   // OTHERWISE '.skip' THIS TEST
   // const public_token = "public-sandbox-d514a8eb-a4f8-4bbc-9d4e-5d1facbc0699";
@@ -161,6 +161,7 @@ describe("post /api/plaid/transactions", () => {
       .then((response) => {
         expect(Array.isArray(response.body)).toEqual(true);
         expect(response.body.length).toBeGreaterThan(0);
+        console.log(response.body);
       });
   });
 });
@@ -319,3 +320,41 @@ describe('POST /api/notes/:transaction_id', () => {
     return request(app).post('/api/notes/bE8D7y4yaGiMNkVxzWkBhEdmApoWyKSmP1Qk7').send(obj).expect(201).then((res) => {expect(res.body).toEqual({ message: "Note added to DB" })})});
 
   });
+
+
+  describe('POST /api/transactions/:transaction_id', () => {
+    const obj = {
+      googleId: "105784672668267029665",
+    };
+    test('returns full transaction object, including the note, for a transaction_id supplied', () => {
+      return request(app)
+      .post('/api/transactions/WNKXrkEko7heVDXr7JDAIRmJaZPX63u6x7K9b')
+      .send(obj)
+      .expect(200)
+      .then((res) => {
+        // expect(response.body[0]).toHaveProperty("TBD notes array", expect.any(String));
+        console.log(res.body);
+
+      })
+    });
+    
+  });
+
+  describe.only('DELETE /api/accounts/:account_id', () => {
+    const obj = {
+      googleId: "103483413108620628802",
+    };
+    test('removes given account from the given user in mongoDB', () => {
+      return request(app)
+      .delete('/api/accounts/lx8VdwyKmbIQVAq9ny53FJKE1APeK1CaozvoX')
+      .send(obj)
+      .expect(204)
+      .then((res) => {
+        // expect(response.body[0]).toHaveProperty("TBD notes array", expect.any(String));
+        console.log(res.body);
+
+      })
+    });
+    
+  });
+  
