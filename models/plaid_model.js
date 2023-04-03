@@ -50,7 +50,8 @@ exports.postCreateLink = () => {
       headers: plaidHeaders,
     })
     .then((response) => {
-      return client.linkTokenCreate(configsForLinkTokenCreate)
+      return client
+        .linkTokenCreate(configsForLinkTokenCreate)
         .then((response) => {
           return response.data;
         });
@@ -104,8 +105,9 @@ exports.fetchPlaidAccounts = (obj) => {
     });
 };
 
-exports.fetchTransactions = (obj) => {
+exports.fetchTransactions = (obj, sort_by, order = "desc") => {
   const { googleId } = obj;
+
   let access_token = "";
   return User.find({ googleId: googleId })
     .then((results) => {
@@ -115,13 +117,46 @@ exports.fetchTransactions = (obj) => {
     .then((access_token) => {
       return client
         .transactionsGet({
-          // access_token,
-          access_token: access_token, //NOTE CHANGED
+          access_token: access_token,
           start_date: "2018-01-01",
           end_date: "2022-02-01",
         })
         .then((response) => {
-          return response.data.transactions;
+          let transactions = response.data.transactions;
+
+          if (sort_by === "amount") {
+            transactions.sort((a, b) => {
+              if (order === "asc") {
+                return a.amount - b.amount;
+              } else {
+                return b.amount - a.amount;
+              }
+            });
+          } else if (sort_by === "date") {
+            transactions.sort((a, b) => {
+              if (order === "asc") {
+                return new Date(a.date) - new Date(b.date);
+              } else {
+                return new Date(b.date) - new Date(a.date);
+              }
+            });
+          } else if (sort_by === "name") {
+            transactions.sort((a, b) => {
+              if (order === "asc") {
+                return a.name.localeCompare(b.name);
+              } else {
+                return b.name.localeCompare(a.name);
+              }
+            });
+          }
+
+          return transactions;
         });
     });
+};
+
+exports.fetchAllCategories = () => {
+  return client.categoriesGet({}).then((response) => {
+    return response.data.categories;
+  });
 };
