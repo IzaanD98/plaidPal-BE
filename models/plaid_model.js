@@ -68,8 +68,9 @@ exports.postTokenExchange = (obj) => {
           { access_token: access_token }
         )
           .then(() => {
-            console.log(returnObj);
+            // console.log(returnObj);
             resolve({ message: "access token added to User DB" });
+            // return({ message: "access token added to User DB" });
           })
           .catch((error) => {
             console.log(error);
