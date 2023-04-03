@@ -47,7 +47,7 @@ exports.tokenExchange = (req, res, next) => {
   // console.log(public_token);
   postTokenExchange(obj)
     .then((result) => {
-      // console.log(result);
+      console.log(result);
       res.status(200).send(result);
     })
     .catch((err) => {
