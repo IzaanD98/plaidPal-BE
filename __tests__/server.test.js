@@ -160,7 +160,7 @@ describe("post /api/plaid/transactions", () => {
       .then((response) => {
         expect(Array.isArray(response.body)).toEqual(true);
         expect(response.body.length).toBeGreaterThan(0);
-        console.log(response.body);
+        // console.log(response.body);
       });
   });
 });
