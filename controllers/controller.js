@@ -4,6 +4,7 @@ const {
   fetchUserById,
   removeUserById,
   addNote,
+  delAccountById,
 } = require("../models/mongo_models");
 const {
   postCreateLink,
@@ -11,6 +12,7 @@ const {
   fetchPlaidAccounts,
   fetchTransactions,
   fetchAllCategories,
+  fetchSingleTransactionAndNote,
 } = require("../models/plaid_model");
 const { request } = require("../server");
 
@@ -81,6 +83,18 @@ exports.getTransactions = (req, res, next) => {
     });
 };
 
+exports.getSingleTransactionAndNote = (req, res, next) => {
+  const {transaction_id} = req.params;
+  const idObj = req.body;
+  fetchSingleTransactionAndNote(idObj, transaction_id)
+  .then((transactionAndNoteObj)=> {
+    res.status(200).send(transactionAndNoteObj);
+  })
+  .catch((err) =>{
+    console.log(err);
+  })
+}
+
 exports.getUserById = (req, res, next) => {
   const { googleId } = req.params;
   fetchUserById(googleId)
@@ -126,3 +140,23 @@ exports.getPlaidCategories = (req, res, next) => {
       console.log(err);
     });
 };
+//   .then((result)=> {
+//     res.status(201).send({ message: "Note added to DB" });
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+// };
+
+exports.deleteAcount = (req, res, next) => {
+  const { account_id } = req.params;
+  const googleId = req.body.googleId;
+  delAccountById(account_id, googleId)
+  .then((result)=>{
+    res.sendStatus(204);
+  })
+  .catch((err)=> {
+    console.log(err);
+  })
+
+}
