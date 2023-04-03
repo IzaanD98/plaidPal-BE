@@ -23,8 +23,11 @@ exports.getAllUsers = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
+      next(err);
     });
 };
+
+
 exports.createUser = (req, res, next) => {
   const newUser = req.body;
   postUser(newUser)
@@ -33,6 +36,7 @@ exports.createUser = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
+      next(err);
     });
 };
 
@@ -43,6 +47,7 @@ exports.createLinkToken = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
+      next(err);
     });
 };
 
@@ -56,7 +61,8 @@ exports.tokenExchange = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
-      res.status(401).send(err);
+      next(err);
+      // res.status(401).send(err);
     });
 };
 
@@ -68,6 +74,7 @@ exports.getPlaidAccounts = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
+      next(err);
     });
 };
 
@@ -80,6 +87,7 @@ exports.getTransactions = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
+      next(err);
     });
 };
 
@@ -92,6 +100,7 @@ exports.getSingleTransactionAndNote = (req, res, next) => {
   })
   .catch((err) =>{
     console.log(err);
+    next(err);
   })
 }
 
@@ -103,6 +112,7 @@ exports.getUserById = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
+      next(err);
     });
 };
 
@@ -114,6 +124,7 @@ exports.deleteUserById = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
+      next(err);
     });
 };
 
@@ -128,6 +139,7 @@ exports.postNoteByTransactionId = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
+      next(err);
     });
 };
 
@@ -138,15 +150,9 @@ exports.getPlaidCategories = (req, res, next) => {
     })
     .catch((err) => {
       console.log(err);
+      next(err);
     });
 };
-//   .then((result)=> {
-//     res.status(201).send({ message: "Note added to DB" });
-//   })
-//   .catch((err) => {
-//     console.log(err);
-//   });
-// };
 
 exports.deleteAcount = (req, res, next) => {
   const { account_id } = req.params;
@@ -157,6 +163,7 @@ exports.deleteAcount = (req, res, next) => {
   })
   .catch((err)=> {
     console.log(err);
+    next(err);
   })
 
 }

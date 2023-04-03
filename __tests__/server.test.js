@@ -49,10 +49,10 @@ describe("GET /api/users", () => {
 // NOTE - need to change all 'validInput' to create a new user each time, otherwise .skip this test
 describe.skip("POST /api/users", () => {
   const validInput = {
-    googleId: "fred_id",
-    displayName: "fred",
-    email: "fred@gmail.com",
-    photo: "www.fred.com",
+    googleId: "fred_id777",
+    displayName: "fred777",
+    email: "fred@gmail777.com",
+    photo: "www.fred777.com",
   };
 
   test("201 status code received when calling api correctly", () => {
@@ -200,9 +200,10 @@ describe.skip("Delete /api/users/:googleId", () => {
     return (
       request(app)
         // .delete("/api/users/112481449490803492799")
-        .delete("/api/users/1111")
+        .delete("/api/users/fred_id")
         .expect(204)
         .then((response) => {
+          console.log(response.body);
           expect(response.body).toEqual({
             message: "User is Deleted",
           });
@@ -260,7 +261,7 @@ describe("POST /api/notes/:transaction_id", () => {
 
   test("A 2nd note for the same transaction_id will also be added", () => {
     const obj = {
-      googleId: "103483413108620628802",
+      googleId: "12",
       note: "Note Two: DONT FORGET - I still need to make an expense claim for this!!!",
     };
     return request(app)
@@ -408,12 +409,27 @@ describe("POST /api/transactions/:transaction_id", () => {
       .send(obj)
       .expect(200)
       .then((res) => {
-        // expect(response.body[0]).toHaveProperty("TBD notes array", expect.any(String));
         // console.log(res.body);
-      });
-  });
+      })
+    });
+    
 });
 
+describe('DELETE /api/accounts/:account_id', () => {
+    const obj = {
+      googleId: "103483413108620628802",
+    };
+    test('removes given account from the given user in mongoDB', () => {
+      return request(app)
+      .delete('/api/accounts/Jvoe9375wnUEAe6MwWRkiRbM3rmzb3CQ6KL6D')
+      .send(obj)
+      .expect(204)
+      .then((res) => {
+        // console.log(res.body);
+      });
+});
+});
+    
 describe("DELETE /api/accounts/:account_id", () => {
   const obj = {
     googleId: "103483413108620628802",
