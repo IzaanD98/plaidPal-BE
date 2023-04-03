@@ -35,13 +35,11 @@ const configs = {
 
 const configsForLinkTokenCreate = {
   user: { client_user_id: "PlaidPal SandBox Client" },
-  // user: "PlaidPal SandBox Client",
   client_name: "user_good",
   language: "en",
   products: ["transactions"],
   country_codes: ["GB"],
-
-  // redirect_uri: //probably no needed - see notes in quickstart index.js
+  // country_codes: ["ERROR_COUNTRY_CODE"], //for error testing - change with above line
 };
 
 exports.postCreateLink = () => {
@@ -93,6 +91,7 @@ exports.fetchPlaidAccounts = (obj) => {
     })
     .then((access_token) => {
       return client.accountsGet({ access_token }).then((response) => {
+      // return client.accountsGet({ id: "RUBBISH" }).then((response) => { // for error testing
         return new Promise((resolve, reject) => {
           const account_ids = response.data.accounts.map(
             (account) => account.account_id
@@ -119,6 +118,7 @@ exports.fetchTransactions = (obj, sort_by, order = "desc") => {
         .transactionsGet({
           access_token: access_token,
           start_date: "2018-01-01",
+          // start_date: 12345, // error testing code
           end_date: "2022-02-01",
         })
         .then((response) => {
@@ -161,7 +161,6 @@ exports.fetchAllCategories = () => {
   });
 };
 exports.fetchSingleTransactionAndNote = (idObj, provided_transaction_id) => {
-  console.log('here');
   const { googleId } = idObj;
   let access_token = "";
   let returnObj = {transaction: null, note: null};
@@ -175,8 +174,8 @@ exports.fetchSingleTransactionAndNote = (idObj, provided_transaction_id) => {
     .then((access_token) => {
       return client
         .transactionsGet({
-          // access_token,
-          access_token: access_token, //NOTE CHANGED
+          access_token: access_token,
+          // access_token: 12345, // error testing
           start_date: "2018-01-01",
           end_date: "2022-02-01",
         })

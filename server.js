@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const User = require("./db/model/UserModel");
+const {handleAllErrors} = require('./controllers/error_handling_controllers');
 const {
   createLinkToken,
   tokenExchange,
@@ -246,5 +247,10 @@ app.post("/api/login", async (req, res) => {
     });
   }
 });
+
+
+app.use(handleAllErrors);
+
+
 
 module.exports = app;
