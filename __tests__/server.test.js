@@ -399,14 +399,13 @@ describe("POST /api/notes/:transaction_id", () => {
   });
 });
 
-
-  describe('POST /api/transactions/:transaction_id', () => {
-    const obj = {
-      googleId: "105784672668267029665",
-    };
-    test('returns full transaction object, including the note, for a transaction_id supplied', () => {
-      return request(app)
-      .post('/api/transactions/WNKXrkEko7heVDXr7JDAIRmJaZPX63u6x7K9b')
+describe("POST /api/transactions/:transaction_id", () => {
+  const obj = {
+    googleId: "105784672668267029665",
+  };
+  test("returns full transaction object, including the note, for a transaction_id supplied", () => {
+    return request(app)
+      .post("/api/transactions/WNKXrkEko7heVDXr7JDAIRmJaZPX63u6x7K9b")
       .send(obj)
       .expect(200)
       .then((res) => {
@@ -414,9 +413,9 @@ describe("POST /api/notes/:transaction_id", () => {
       })
     });
     
-  });
+});
 
-  describe('DELETE /api/accounts/:account_id', () => {
+describe('DELETE /api/accounts/:account_id', () => {
     const obj = {
       googleId: "103483413108620628802",
     };
@@ -427,8 +426,22 @@ describe("POST /api/notes/:transaction_id", () => {
       .expect(204)
       .then((res) => {
         // console.log(res.body);
-      })
-    });
+      });
+});
+});
     
+describe("DELETE /api/accounts/:account_id", () => {
+  const obj = {
+    googleId: "103483413108620628802",
+  };
+  test("removes given account from the given user in mongoDB", () => {
+    return request(app)
+      .delete("/api/accounts/qPnV9z8xJKI87abNGyqMt7wNBoDQwBT6rvqra")
+      .send(obj)
+      .expect(204)
+      .then((res) => {
+        // expect(response.body[0]).toHaveProperty("TBD notes array", expect.any(String));
+        console.log(res.body);
+      });
   });
-  
+});

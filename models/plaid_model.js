@@ -104,7 +104,7 @@ exports.fetchPlaidAccounts = (obj) => {
     });
 };
 
-exports.fetchTransactions = (obj, sort_by, order = "desc") => {
+exports.fetchTransactions = (obj, sort_by = "date", order = "desc") => {
   const { googleId } = obj;
 
   let access_token = "";
@@ -163,8 +163,8 @@ exports.fetchAllCategories = () => {
 exports.fetchSingleTransactionAndNote = (idObj, provided_transaction_id) => {
   const { googleId } = idObj;
   let access_token = "";
-  let returnObj = {transaction: null, note: null};
-  
+  let returnObj = { transaction: null, note: null };
+
   return User.find({ googleId: googleId })
     .then((results) => {
       access_token = results[0].access_token;
@@ -180,17 +180,18 @@ exports.fetchSingleTransactionAndNote = (idObj, provided_transaction_id) => {
           end_date: "2022-02-01",
         })
         .then((response) => {
-          const transactionObj = response.data.transactions.filter((tran)=>{
+          const transactionObj = response.data.transactions.filter((tran) => {
             return tran.transaction_id === provided_transaction_id;
           });
           returnObj.transaction = transactionObj;
-          return User.find({ googleId: googleId })
-          .then((user) => {
-            const noteForTransaction = user[0].notes.filter(noteObj => noteObj.transaction_id === provided_transaction_id)[0];
+          return User.find({ googleId: googleId }).then((user) => {
+            const noteForTransaction = user[0].notes.filter(
+              (noteObj) => noteObj.transaction_id === provided_transaction_id
+            )[0];
             // console.log(user[0].notes);
             returnObj.note = noteForTransaction;
             return returnObj;
-          })
+          });
         });
     });
-}
+};
