@@ -10,7 +10,9 @@ const {
   postTokenExchange,
   fetchPlaidAccounts,
   fetchTransactions,
+  fetchAllCategories,
 } = require("../models/plaid_model");
+const { request } = require("../server");
 
 exports.getAllUsers = (req, res, next) => {
   fetchAllUsers()
@@ -33,9 +35,9 @@ exports.createUser = (req, res, next) => {
 };
 
 exports.createLinkToken = (req, res, next) => {
-      postCreateLink()
-      .then((link_token) => {
-        res.status(200).set({}).send(link_token);
+  postCreateLink()
+    .then((link_token) => {
+      res.status(200).set({}).send(link_token);
     })
     .catch((err) => {
       console.log(err);
@@ -68,8 +70,9 @@ exports.getPlaidAccounts = (req, res, next) => {
 };
 
 exports.getTransactions = (req, res, next) => {
+  const { sort_by, order } = req.query;
   const obj = req.body;
-  fetchTransactions(obj)
+  fetchTransactions(obj, sort_by, order)
     .then((transactions) => {
       res.status(200).send(transactions);
     })
@@ -103,13 +106,23 @@ exports.deleteUserById = (req, res, next) => {
 exports.postNoteByTransactionId = (req, res, next) => {
   const { transaction_id } = req.params;
   const obj = req.body;
-  const {googleId, note} = obj;
+  const { googleId, note } = obj;
 
   addNote(transaction_id, googleId, note)
-  .then((result)=> {
-    res.status(201).send({ message: "Note added to DB" });
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+    .then((result) => {
+      res.status(201).send({ message: "Note added to DB" });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+exports.getPlaidCategories = (req, res, next) => {
+  fetchAllCategories()
+    .then((result) => {
+      res.status(200).send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
