@@ -163,7 +163,7 @@ exports.fetchAllCategories = () => {
 exports.fetchSingleTransactionAndNote = (idObj, provided_transaction_id) => {
   const { googleId } = idObj;
   let access_token = "";
-  let returnObj = { transaction: null, note: null };
+  let returnObj = { transaction: null, note: {} };
 
   return User.find({ googleId: googleId })
     .then((results) => {
@@ -188,8 +188,12 @@ exports.fetchSingleTransactionAndNote = (idObj, provided_transaction_id) => {
             const noteForTransaction = user[0].notes.filter(
               (noteObj) => noteObj.transaction_id === provided_transaction_id
             )[0];
-            // console.log(user[0].notes);
-            returnObj.note = noteForTransaction;
+            console.log(noteForTransaction);
+            if(noteForTransaction === undefined){
+              returnObj.note = {};
+            } else{
+              returnObj.note = noteForTransaction;
+            }
             return returnObj;
           });
         });

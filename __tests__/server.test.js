@@ -150,7 +150,7 @@ describe("POST /api/plaid/accounts", () => {
 
 describe("post /api/plaid/transactions", () => {
   const obj = {
-    googleId: "103483413108620628802",
+    googleId: "108971830262728991643",
   };
   it("return 200 and get array transactions ", () => {
     return request(app)
@@ -384,32 +384,34 @@ describe("POST /api/notes/:transaction_id", () => {
       });
   });
 
-  test(".....", () => {
+  test.only(".....", () => {
     const obj = {
-      googleId: "105784672668267029665",
-      note: "Eighth one: should be added and overwrites second one",
+      googleId: "108971830262728991643",
+      note: "Priority:1, Date Created: 04/04/2023: Don't forget to cancel this to avoid it recrruring",
     };
     return request(app)
-      .post("/api/notes/bE8D7y4yaGiMNkVxzWkBhEdmApoWyKSmP1Qk7")
+      .post("/api/notes/DezVVpLgNKHNEWMj9ykLtgMxDqDZqeCE1ylER")
       .send(obj)
       .expect(201)
       .then((res) => {
         expect(res.body).toEqual({ message: "Note added to DB" });
+        console.log(res.body);
       });
   });
 });
 
-describe("POST /api/transactions/:transaction_id", () => {
+describe.only("POST /api/transactions/:transaction_id", () => {
   const obj = {
-    googleId: "105784672668267029665",
+    googleId: "108971830262728991643",
   };
   test("returns full transaction object, including the note, for a transaction_id supplied", () => {
     return request(app)
-      .post("/api/transactions/WNKXrkEko7heVDXr7JDAIRmJaZPX63u6x7K9b")
+      // .post("/api/transactions/DezVVpLgNKHNEWMj9ykLtgMxDqDZqeCE1ylER")
+      .post("/api/transactions/RP6y68qaj9Ud3LmL4o3jh4KNbzgoVWuPArQKl")
       .send(obj)
       .expect(200)
       .then((res) => {
-        // console.log(res.body);
+        console.log(res.body);
       })
     });
     
